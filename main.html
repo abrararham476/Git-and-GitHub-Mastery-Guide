@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Abrar Arham - Daffodil International University">
+    <meta name="copyright" content="© 2026 Abrar Arham, Daffodil International University. All rights reserved.">
+    <meta name="description" content="Interactive Git & GitHub Mastery Guide & Simulator created by Abrar Arham, Daffodil International University. Learn version control, practice CLI commands, and master PR workflows.">
+    <title>Git & GitHub Mastery Guide | Abrar Arham - DIU</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        github: {
+                            bg: '#0d1117',
+                            card: '#161b22',
+                            border: '#30363d',
+                            header: '#21262d',
+                            text: '#c9d1d9',
+                            heading: '#f0f6fc',
+                            blue: '#58a6ff',
+                            green: '#238636',
+                            greenHover: '#2ea043',
+                            purple: '#bc8cff',
+                            red: '#f85149',
+                            orange: '#f0883e'
+                        },
+                        git: {
+                            orange: '#F05032',
+                            lightOrange: '#ff6b4a'
+                        },
+                        diu: {
+                            green: '#008751',
+                            teal: '#0e7490'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+        }
+        ::selection {
+            background-color: #f05032;
+            color: #ffffff;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
+        }
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+        .glow-orange {
+            box-shadow: 0 0 25px -5px rgba(240, 80, 50, 0.35);
+        }
+        .glow-blue {
+            box-shadow: 0 0 25px -5px rgba(88, 166, 255, 0.25);
+        }
+        .glow-author {
+            box-shadow: 0 0 20px -2px rgba(88, 166, 255, 0.3);
+        }
+        .glass-panel {
+            background: rgba(22, 27, 34, 0.90);
+            backdrop-filter: blur(12px);
+        }
+        .stage-card {
+            transition: all 0.25s ease-in-out;
+        }
+        .stage-card:hover {
+            transform: translateY(-2px);
+        }
+        .stage-active {
+            border-color: #58a6ff !important;
+            box-shadow: 0 0 20px -3px rgba(88, 166, 255, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-github-bg text-github-text min-h-screen flex flex-col antialiased relative">
+
+    <!-- Sticky Top Navigation -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-github-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo & Author Badge -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-git-orange flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        <i class="fa-brands fa-git-alt"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-github-heading font-bold text-base sm:text-lg tracking-tight flex items-center gap-2">
+                            Git & GitHub <span class="hidden sm:inline-block bg-github-border text-github-blue text-xs px-2 py-0.5 rounded-full border border-github-blue/30 font-mono">Mastery</span>
+                        </span>
+                        <!-- Verified Author Badge in Navbar -->
+                        <div class="flex items-center gap-1.5 text-xs text-github-text/90 font-medium">
+                            <span class="text-github-blue font-semibold">Abrar Arham</span>
+                            <i class="fa-solid fa-circle-check text-github-blue text-[11px]" title="Verified Creator"></i>
+                            <span class="text-github-border">|</span>
+                            <span class="text-xs text-github-text/70 hidden sm:inline">Daffodil International University</span>
+                            <span class="text-xs text-github-text/70 sm:hidden">DIU</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden lg:flex items-center space-x-1 text-sm font-medium">
+                    <a href="#intro" class="nav-link px-3 py-2 rounded-md text-github-text hover:text-github-heading hover:bg-github-header transition">Intro</a>
+                    <a href="#architecture" class="nav-link px-3 py-2 rounded-md text-github-text hover:text-github-heading hover:bg-github-header transition">Architecture</a>
+                    <a href="#simulator" class="nav-link px-3 py-2 rounded-md text-github-blue hover:bg-github-header border border-github-blue/30 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-terminal text-xs"></i> CLI Simulator
+                    </a>
+                    <a href="#cheatsheet" class="nav-link px-3 py-2 rounded-md text-github-text hover:text-github-heading hover:bg-github-header transition">Cheat Sheet</a>
+                    <a href="#github-flow" class="nav-link px-3 py-2 rounded-md text-github-text hover:text-github-heading hover:bg-github-header transition">GitHub & PRs</a>
+                    <a href="#best-practices" class="nav-link px-3 py-2 rounded-md text-github-text hover:text-github-heading hover:bg-github-header transition">Workflows</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-md text-github-text hover:bg-github-header">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobileMenu" class="hidden lg:hidden border-b border-github-border bg-github-card px-4 pt-2 pb-4 space-y-2 text-sm">
+            <div class="p-2 mb-2 bg-github-header rounded-lg border border-github-border flex items-center justify-between">
+                <div class="text-xs font-mono">
+                    <span class="text-github-heading font-bold">Abrar Arham</span>
+                    <span class="block text-[10px] text-github-blue">Daffodil International University</span>
+                </div>
+                <span class="text-xs bg-github-green/20 text-github-green px-2 py-0.5 rounded border border-github-green/30">Author</span>
+            </div>
+            <a href="#intro" class="block px-3 py-2 rounded-md hover:bg-github-header">Intro & Git vs GitHub</a>
+            <a href="#architecture" class="block px-3 py-2 rounded-md hover:bg-github-header">Git Architecture</a>
+            <a href="#simulator" class="block px-3 py-2 rounded-md text-github-blue hover:bg-github-header"><i class="fa-solid fa-terminal mr-2"></i>Terminal Simulator</a>
+            <a href="#cheatsheet" class="block px-3 py-2 rounded-md hover:bg-github-header">Command Cheat Sheet</a>
+            <a href="#github-flow" class="block px-3 py-2 rounded-md hover:bg-github-header">GitHub Features & PRs</a>
+            <a href="#best-practices" class="block px-3 py-2 rounded-md hover:bg-github-header">Workflows & Standards</a>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="relative overflow-hidden py-16 md:py-24 border-b border-github-border bg-gradient-to-b from-github-bg via-github-card/40 to-github-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto space-y-6">
+                
+                <!-- PROMINENT AUTHOR BADGE / CARD IN HERO -->
+                <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-github-card border border-github-blue/40 text-github-heading text-xs sm:text-sm font-medium shadow-md glow-author">
+                    <div class="w-6 h-6 rounded-full bg-github-blue/20 text-github-blue flex items-center justify-center font-bold text-xs">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <span>Designed & Authored by <strong class="text-github-blue font-bold">Abrar Arham</strong> &bull; <span class="text-github-text/90">Daffodil International University</span></span>
+                    <span class="bg-github-green/20 text-github-green text-[10px] uppercase font-mono px-2 py-0.5 rounded-full border border-github-green/30 font-bold">Verified</span>
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl font-extrabold text-github-heading tracking-tight leading-tight">
+                    Master <span class="text-git-orange">Git</span> & <span class="text-github-blue">GitHub</span> From First Commit to PR
+                </h1>
+                <p class="text-base sm:text-lg text-github-text leading-relaxed">
+                    Understand modern version control architecture, explore 4-stage lifecycles, practice inside a real-time CLI terminal simulator, and reference interactive workflow standards.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+                    <a href="#simulator" class="px-6 py-3 rounded-lg bg-git-orange hover:bg-git-lightOrange text-white font-semibold transition flex items-center gap-2 shadow-lg glow-orange">
+                        <i class="fa-solid fa-terminal"></i> Launch Terminal Simulator
+                    </a>
+                    <a href="#architecture" class="px-6 py-3 rounded-lg bg-github-header hover:bg-github-border text-github-heading border border-github-border font-semibold transition flex items-center gap-2">
+                        <i class="fa-solid fa-diagram-project"></i> Interactive Architecture
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1: Introduction & Git vs GitHub -->
+    <section id="intro" class="py-16 border-b border-github-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-github-heading tracking-tight flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-md bg-git-orange/20 text-git-orange flex items-center justify-center text-base"><i class="fa-solid fa-circle-info"></i></span>
+                    Introduction: Git vs. GitHub
+                </h2>
+                <p class="mt-2 text-github-text">Understanding the fundamental distinction between the local tool and the cloud platform.</p>
+            </div>
+
+            <!-- Side by Side Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Git Box -->
+                <div class="bg-github-card border border-github-border rounded-xl p-6 relative overflow-hidden hover:border-git-orange/50 transition">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-brands fa-git-alt text-4xl text-git-orange"></i>
+                            <div>
+                                <h3 class="text-xl font-bold text-github-heading">Git</h3>
+                                <span class="text-xs font-mono text-git-orange">Distributed Version Control System (DVCS)</span>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded bg-github-header text-xs text-github-text font-mono border border-github-border">Local CLI Tool</span>
+                    </div>
+                    <p class="text-sm text-github-text leading-relaxed mb-4">
+                        Git is an open-source command-line tool installed on your local system. It tracks code changes, manages branches, creates snapshot commits, and allows fully offline software development.
+                    </p>
+                    <ul class="space-y-2 text-xs font-mono text-github-text border-t border-github-border pt-4">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-git-orange"></i> Works entirely offline on your machine</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-git-orange"></i> Stores full history inside hidden <code class="text-github-blue">.git/</code> directory</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-git-orange"></i> High speed branching & merge handling</li>
+                    </ul>
+                </div>
+
+                <!-- GitHub Box -->
+                <div class="bg-github-card border border-github-border rounded-xl p-6 relative overflow-hidden hover:border-github-blue/50 transition">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-brands fa-github text-4xl text-github-heading"></i>
+                            <div>
+                                <h3 class="text-xl font-bold text-github-heading">GitHub</h3>
+                                <span class="text-xs font-mono text-github-blue">Cloud Hosting & Collaboration Platform</span>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded bg-github-header text-xs text-github-text font-mono border border-github-border">Web Service</span>
+                    </div>
+                    <p class="text-sm text-github-text leading-relaxed mb-4">
+                        GitHub is a cloud service built around Git. It hosts remote repositories online and adds critical team tools: Pull Requests, code reviews, automated CI/CD pipelines, issue tracking, and security scanning.
+                    </p>
+                    <ul class="space-y-2 text-xs font-mono text-github-text border-t border-github-border pt-4">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-github-blue"></i> Requires internet connectivity to synchronize</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-github-blue"></i> Adds Pull Requests, Issues, Actions & Codespaces</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-github-blue"></i> Cloud backups, access control & team permissions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Detailed Comparison Table -->
+            <div class="bg-github-card border border-github-border rounded-xl overflow-hidden shadow-sm">
+                <div class="px-6 py-4 bg-github-header border-b border-github-border flex justify-between items-center">
+                    <h3 class="font-semibold text-github-heading text-sm">Direct Feature Comparison</h3>
+                    <span class="text-xs font-mono text-github-blue">Module 1.1</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-github-bg text-github-heading border-b border-github-border font-mono text-xs">
+                            <tr>
+                                <th class="py-3 px-6">Feature Aspect</th>
+                                <th class="py-3 px-6 text-git-orange">Git (Command Line)</th>
+                                <th class="py-3 px-6 text-github-blue">GitHub (Cloud)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-github-border text-xs sm:text-sm">
+                            <tr>
+                                <td class="py-3.5 px-6 font-semibold text-github-heading">Primary Function</td>
+                                <td class="py-3.5 px-6">Tracks file changes & branches locally</td>
+                                <td class="py-3.5 px-6">Hosts Git repos remotely & aids team workflows</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-6 font-semibold text-github-heading">User Interface</td>
+                                <td class="py-3.5 px-6">Terminal / Command Prompt / CLI</td>
+                                <td class="py-3.5 px-6">Web Portal, REST API, GitHub Desktop</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-6 font-semibold text-github-heading">Core Mechanics</td>
+                                <td class="py-3.5 px-6"><code class="text-git-orange">commit</code>, <code class="text-git-orange">branch</code>, <code class="text-git-orange">merge</code>, <code class="text-git-orange">stash</code></td>
+                                <td class="py-3.5 px-6"><code class="text-github-blue">Pull Request</code>, <code class="text-github-blue">Fork</code>, <code class="text-github-blue">Issue</code>, <code class="text-github-blue">Actions</code></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 px-6 font-semibold text-github-heading">Network Status</td>
+                                <td class="py-3.5 px-6 text-github-green font-semibold">100% Offline Capable</td>
+                                <td class="py-3.5 px-6 text-github-blue font-semibold">Online Required</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: Interactive Git Architecture & File Lifecycle Visualizer -->
+    <section id="architecture" class="py-16 border-b border-github-border bg-github-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-github-heading tracking-tight flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-md bg-github-blue/20 text-github-blue flex items-center justify-center text-base"><i class="fa-solid fa-diagram-project"></i></span>
+                    Git Architecture & Interactive 4-Stage Lifecycle
+                </h2>
+                <p class="mt-2 text-github-text">Click on any architectural stage below to see how code transitions across local and remote boundaries.</p>
+            </div>
+
+            <!-- Interactive Architecture Stage Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <!-- Stage 1: Working Directory -->
+                <div id="arch-stage-1" onclick="selectArchStage(1)" class="stage-card bg-github-card border border-github-border rounded-xl p-5 cursor-pointer stage-active">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-github-red/10 text-github-red border border-github-red/30 font-bold">1. Local Files</span>
+                        <i class="fa-solid fa-folder-open text-github-red text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-github-heading text-base mb-1">Working Directory</h3>
+                    <p class="text-xs text-github-text leading-relaxed">Actual editable files on your filesystem (Untracked / Modified).</p>
+                    <div class="mt-4 pt-3 border-t border-github-border text-xs font-mono text-github-blue flex items-center justify-between">
+                        <span>Forward Action:</span>
+                        <span class="bg-github-header px-1.5 py-0.5 rounded border border-github-border text-github-orange font-bold">git add</span>
+                    </div>
+                </div>
+
+                <!-- Stage 2: Staging Area -->
+                <div id="arch-stage-2" onclick="selectArchStage(2)" class="stage-card bg-github-card border border-github-border rounded-xl p-5 cursor-pointer">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-github-orange/10 text-github-orange border border-github-orange/30 font-bold">2. Index</span>
+                        <i class="fa-solid fa-list-check text-github-orange text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-github-heading text-base mb-1">Staging Area</h3>
+                    <p class="text-xs text-github-text leading-relaxed">Drafting area curating changes prepared for your next snapshot commit.</p>
+                    <div class="mt-4 pt-3 border-t border-github-border text-xs font-mono text-github-blue flex items-center justify-between">
+                        <span>Forward Action:</span>
+                        <span class="bg-github-header px-1.5 py-0.5 rounded border border-github-border text-github-green font-bold">git commit</span>
+                    </div>
+                </div>
+
+                <!-- Stage 3: Local Repository -->
+                <div id="arch-stage-3" onclick="selectArchStage(3)" class="stage-card bg-github-card border border-github-border rounded-xl p-5 cursor-pointer">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-github-green/10 text-github-green border border-github-green/30 font-bold">3. Database</span>
+                        <i class="fa-solid fa-box-archive text-github-green text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-github-heading text-base mb-1">Local Repository</h3>
+                    <p class="text-xs text-github-text leading-relaxed">Committed snapshot database stored inside hidden <code class="text-github-blue">.git/</code> directory.</p>
+                    <div class="mt-4 pt-3 border-t border-github-border text-xs font-mono text-github-blue flex items-center justify-between">
+                        <span>Forward Action:</span>
+                        <span class="bg-github-header px-1.5 py-0.5 rounded border border-github-border text-github-purple font-bold">git push</span>
+                    </div>
+                </div>
+
+                <!-- Stage 4: Remote Repository -->
+                <div id="arch-stage-4" onclick="selectArchStage(4)" class="stage-card bg-github-card border border-github-border rounded-xl p-5 cursor-pointer">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-github-purple/10 text-github-purple border border-github-purple/30 font-bold">4. Cloud</span>
+                        <i class="fa-solid fa-cloud-arrow-up text-github-purple text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-github-heading text-base mb-1">Remote Repository</h3>
+                    <p class="text-xs text-github-text leading-relaxed">Central server host (GitHub) maintaining shared team history copies.</p>
+                    <div class="mt-4 pt-3 border-t border-github-border text-xs font-mono text-github-blue flex items-center justify-between">
+                        <span>Pull Action:</span>
+                        <span class="bg-github-header px-1.5 py-0.5 rounded border border-github-border text-github-blue font-bold">git pull / fetch</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Detail Panel for Selected Stage -->
+            <div id="archDetailPanel" class="bg-github-card border border-github-border rounded-xl p-6 transition-all">
+                <!-- Content generated dynamically by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: Interactive Real-Time Git CLI Terminal Simulator -->
+    <section id="simulator" class="py-16 border-b border-github-border bg-gradient-to-b from-github-bg via-github-card/20 to-github-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-github-blue/10 border border-github-blue/30 text-github-blue text-xs font-mono mb-2">
+                        <i class="fa-solid fa-flask"></i> Hands-On Interactive CLI Sandbox
+                    </div>
+                    <h2 class="text-3xl font-bold text-github-heading tracking-tight">Interactive Git CLI Simulator</h2>
+                    <p class="mt-1 text-github-text text-sm">Execute actual Git commands in the terminal and watch the Visual Repository State update dynamically.</p>
+                </div>
+                <div class="text-xs font-mono bg-github-header px-3 py-1.5 rounded-lg border border-github-border text-github-text self-start md:self-auto">
+                    Author: <span class="text-github-blue font-bold">Abrar Arham</span> (DIU)
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left: Terminal CLI Window -->
+                <div class="lg:col-span-7 bg-[#05080c] border border-github-border rounded-xl shadow-2xl overflow-hidden flex flex-col h-[540px]">
+                    <!-- Terminal Bar -->
+                    <div class="bg-github-header px-4 py-3 border-b border-github-border flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-github-red inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-github-orange inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-github-green inline-block"></span>
+                            <span class="text-xs font-mono text-github-text ml-2"><i class="fa-solid fa-terminal mr-1"></i> bash - my-project</span>
+                        </div>
+                        <button id="clearTerminalBtn" class="text-xs text-github-text hover:text-github-heading font-mono bg-github-bg px-2.5 py-1 rounded border border-github-border hover:border-github-blue transition">
+                            Clear Output
+                        </button>
+                    </div>
+
+                    <!-- Terminal Output Box -->
+                    <div id="terminalOutput" class="p-4 code-font text-xs sm:text-sm text-github-text overflow-y-auto flex-grow space-y-2 leading-relaxed">
+                        <div class="text-github-text/70">Git Interactive Terminal Simulator v2.0</div>
+                        <div class="text-github-text/70">Authored by <span class="text-github-blue font-bold">Abrar Arham</span> (Daffodil International University).</div>
+                        <div class="text-github-text/70">Type <span class="text-github-blue font-bold">help</span> to view supported commands or click a quick action below.</div>
+                        <hr class="border-github-border/50 my-2">
+                    </div>
+
+                    <!-- Terminal Input Line -->
+                    <form id="terminalForm" class="p-3 bg-github-card/80 border-t border-github-border flex items-center gap-2">
+                        <span id="terminalPrompt" class="code-font text-xs sm:text-sm text-github-blue font-bold whitespace-nowrap">
+                            user@dev:~/my-project$
+                        </span>
+                        <input id="terminalInput" type="text" autocomplete="off" placeholder="type command e.g. git init, touch app.js, git add ." class="w-full bg-transparent code-font text-xs sm:text-sm text-github-heading focus:outline-none placeholder-github-text/40" autofocus />
+                    </form>
+                </div>
+
+                <!-- Right: Visual State Diagram -->
+                <div class="lg:col-span-5 bg-github-card border border-github-border rounded-xl p-5 flex flex-col justify-between h-[540px] overflow-y-auto">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-github-border pb-3 mb-4">
+                            <h3 class="font-bold text-github-heading text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-eye text-github-blue"></i> Visual Repository State
+                            </h3>
+                            <span id="activeBranchBadge" class="text-xs font-mono bg-github-purple/10 text-github-purple border border-github-purple/30 px-2 py-0.5 rounded">
+                                Repo Not Initialized
+                            </span>
+                        </div>
+
+                        <!-- 5 Status Boxes -->
+                        <div class="space-y-3">
+                            <!-- Untracked / Modified -->
+                            <div class="p-3 bg-github-bg rounded-lg border border-github-border">
+                                <div class="flex justify-between items-center text-xs font-mono mb-1.5">
+                                    <span class="text-github-red font-semibold"><i class="fa-solid fa-file-circle-plus mr-1"></i> Working Dir (Untracked)</span>
+                                    <span id="untrackedCount" class="text-github-text text-[10px] bg-github-header px-1.5 py-0.5 rounded border border-github-border">0 files</span>
+                                </div>
+                                <div id="untrackedBox" class="flex flex-wrap gap-1.5 min-h-[28px] text-xs font-mono text-github-text/60 italic">
+                                    Clean
+                                </div>
+                            </div>
+
+                            <!-- Staged -->
+                            <div class="p-3 bg-github-bg rounded-lg border border-github-border">
+                                <div class="flex justify-between items-center text-xs font-mono mb-1.5">
+                                    <span class="text-github-orange font-semibold"><i class="fa-solid fa-list-check mr-1"></i> Staging Area (Index)</span>
+                                    <span id="stagedCount" class="text-github-text text-[10px] bg-github-header px-1.5 py-0.5 rounded border border-github-border">0 files</span>
+                                </div>
+                                <div id="stagedBox" class="flex flex-wrap gap-1.5 min-h-[28px] text-xs font-mono text-github-text/60 italic">
+                                    Empty
+                                </div>
+                            </div>
+
+                            <!-- Stash -->
+                            <div class="p-3 bg-github-bg rounded-lg border border-github-border">
+                                <div class="flex justify-between items-center text-xs font-mono mb-1.5">
+                                    <span class="text-github-blue font-semibold"><i class="fa-solid fa-box-archive mr-1"></i> Git Stash Stack</span>
+                                    <span id="stashCount" class="text-github-text text-[10px] bg-github-header px-1.5 py-0.5 rounded border border-github-border">0 stashes</span>
+                                </div>
+                                <div id="stashBox" class="flex flex-wrap gap-1.5 min-h-[24px] text-xs font-mono text-github-text/60 italic">
+                                    No stashed changes
+                                </div>
+                            </div>
+
+                            <!-- Local Commits -->
+                            <div class="p-3 bg-github-bg rounded-lg border border-github-border">
+                                <div class="flex justify-between items-center text-xs font-mono mb-1.5">
+                                    <span class="text-github-green font-semibold"><i class="fa-solid fa-boxes-packing mr-1"></i> Local Repo Commits</span>
+                                    <span id="commitsCount" class="text-github-text text-[10px] bg-github-header px-1.5 py-0.5 rounded border border-github-border">0 commits</span>
+                                </div>
+                                <div id="commitsBox" class="space-y-1 min-h-[32px] text-xs font-mono text-github-text/60 italic">
+                                    No commits yet
+                                </div>
+                            </div>
+
+                            <!-- Remote GitHub Repo -->
+                            <div class="p-3 bg-github-bg rounded-lg border border-github-border">
+                                <div class="flex justify-between items-center text-xs font-mono mb-1.5">
+                                    <span class="text-github-purple font-semibold"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Remote Repo (GitHub)</span>
+                                    <span id="remoteCount" class="text-github-text text-[10px] bg-github-header px-1.5 py-0.5 rounded border border-github-border">Not pushed</span>
+                                </div>
+                                <div id="remoteBox" class="space-y-1 min-h-[28px] text-xs font-mono text-github-text/60 italic">
+                                    Behind local
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Command Helper Chips -->
+                    <div class="pt-3 border-t border-github-border mt-3">
+                        <span class="text-[11px] text-github-text block mb-1.5 font-medium">Quick Command Chips:</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="fillCmd('git init')" class="text-[11px] font-mono bg-github-header hover:bg-github-border text-github-blue px-2 py-1 rounded border border-github-border">git init</button>
+                            <button onclick="fillCmd('touch index.html')" class="text-[11px] font-mono bg-github-header hover:bg-github-border text-github-text px-2 py-1 rounded border border-github-border">touch index.html</button>
+                            <button onclick="fillCmd('git add .')" class="text-[11px] font-mono bg-github-header hover:bg-github-border text-github-orange px-2 py-1 rounded border border-github-border">git add .</button>
+                            <button onclick="fillCmd('git commit -m &quot;feat: initial setup&quot;')" class="text-[11px] font-mono bg-github-header hover:bg-github-border text-github-green px-2 py-1 rounded border border-github-border">git commit</button>
+                            <button onclick="fillCmd('git stash')" class="text-[11px] font-mono bg-github-header hover:bg-github-border text-github-blue px-2 py-1 rounded border border-github-border">git stash</button>
+                            <button onclick="fillCmd('git push')" class="text-[11px] font-mono bg-github-header hover:bg-github-border text-github-purple px-2 py-1 rounded border border-github-border">git push</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: Searchable Command Cheat Sheet -->
+    <section id="cheatsheet" class="py-16 border-b border-github-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-github-heading tracking-tight flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-md bg-git-orange/20 text-git-orange flex items-center justify-center text-base"><i class="fa-solid fa-book"></i></span>
+                        Git Command Cheat Sheet
+                    </h2>
+                    <p class="mt-1 text-github-text text-sm">Find, copy, and learn essential commands with syntax breakdowns.</p>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative w-full md:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-github-text/60 text-sm"></i>
+                    <input id="cheatSearch" type="text" placeholder="Search commands e.g. stash, rebase, branch..." class="w-full bg-github-card border border-github-border rounded-lg pl-10 pr-4 py-2 text-sm text-github-heading focus:outline-none focus:border-github-blue transition" />
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="flex flex-wrap gap-2 mb-8 border-b border-github-border pb-4" id="categoryTabs">
+                <button data-cat="all" class="cat-btn active px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono bg-git-orange text-white">All Commands</button>
+                <button data-cat="setup" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono bg-github-card text-github-text hover:bg-github-header border border-github-border">Setup & Config</button>
+                <button data-cat="basic" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono bg-github-card text-github-text hover:bg-github-header border border-github-border">Basic Flow</button>
+                <button data-cat="branching" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono bg-github-card text-github-text hover:bg-github-header border border-github-border">Branching & Merging</button>
+                <button data-cat="undoing" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono bg-github-card text-github-text hover:bg-github-header border border-github-border">Undoing Changes</button>
+                <button data-cat="stashing" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono bg-github-card text-github-text hover:bg-github-header border border-github-border">Stashing</button>
+                <button data-cat="remote" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono bg-github-card text-github-text hover:bg-github-header border border-github-border">Remote & GitHub</button>
+            </div>
+
+            <!-- Command Cards Grid -->
+            <div id="cheatGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards rendered dynamically by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: GitHub Features & PR Workflow -->
+    <section id="github-flow" class="py-16 border-b border-github-border bg-github-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-github-heading tracking-tight flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-md bg-github-purple/20 text-github-purple flex items-center justify-center text-base"><i class="fa-brands fa-github"></i></span>
+                    GitHub Features & PR Workflow Explorer
+                </h2>
+                <p class="mt-2 text-github-text">How engineering teams collaborate, review code, and maintain software safety on GitHub.</p>
+            </div>
+
+            <!-- Standard PR Workflow Interactive Steps -->
+            <div class="bg-github-card border border-github-border rounded-xl p-6 mb-12 shadow-md">
+                <h3 class="text-xl font-bold text-github-heading mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-code-pull-request text-github-green"></i> The Standard Pull Request (PR) Workflow Lifecycle
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+                    <!-- Step 1 -->
+                    <div class="bg-github-bg border border-github-border rounded-lg p-4 relative hover:border-github-blue transition">
+                        <div class="w-7 h-7 rounded-full bg-github-blue/20 text-github-blue font-mono font-bold text-xs flex items-center justify-center mb-3 border border-github-blue/40">1</div>
+                        <h4 class="font-bold text-github-heading text-sm mb-1">1. Fork or Branch</h4>
+                        <p class="text-xs text-github-text">Create a isolated feature branch locally (<code class="text-github-blue">git checkout -b feat/auth</code>).</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="bg-github-bg border border-github-border rounded-lg p-4 relative hover:border-github-blue transition">
+                        <div class="w-7 h-7 rounded-full bg-github-blue/20 text-github-blue font-mono font-bold text-xs flex items-center justify-center mb-3 border border-github-blue/40">2</div>
+                        <h4 class="font-bold text-github-heading text-sm mb-1">2. Commit & Push</h4>
+                        <p class="text-xs text-github-text">Make changes, commit with clear messages, and push your branch to GitHub.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-github-bg border border-github-border rounded-lg p-4 relative hover:border-github-green transition">
+                        <div class="w-7 h-7 rounded-full bg-github-green/20 text-github-green font-mono font-bold text-xs flex items-center justify-center mb-3 border border-github-green/40">3</div>
+                        <h4 class="font-bold text-github-heading text-sm mb-1">3. Open Pull Request</h4>
+                        <p class="text-xs text-github-text">Submit a PR describing changes, linking issues, and requesting reviews.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="bg-github-bg border border-github-border rounded-lg p-4 relative hover:border-github-purple transition">
+                        <div class="w-7 h-7 rounded-full bg-github-purple/20 text-github-purple font-mono font-bold text-xs flex items-center justify-center mb-3 border border-github-purple/40">4</div>
+                        <h4 class="font-bold text-github-heading text-sm mb-1">4. Code Review & CI</h4>
+                        <p class="text-xs text-github-text">GitHub Actions run automated tests while teammates leave inline feedback.</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="bg-github-bg border border-github-border rounded-lg p-4 relative hover:border-github-green transition">
+                        <div class="w-7 h-7 rounded-full bg-github-green text-white font-mono font-bold text-xs flex items-center justify-center mb-3">5</div>
+                        <h4 class="font-bold text-github-heading text-sm mb-1">5. Merge to Main</h4>
+                        <p class="text-xs text-github-text">Once approved, squash or merge PR into the production branch.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Platform Feature Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-github-card border border-github-border rounded-xl p-5 hover:border-github-purple/50 transition">
+                    <div class="w-10 h-10 rounded-lg bg-github-purple/10 text-github-purple flex items-center justify-center text-lg mb-4 border border-github-purple/30">
+                        <i class="fa-solid fa-code-fork"></i>
+                    </div>
+                    <h4 class="font-bold text-github-heading text-base mb-2">Forks vs. Clones</h4>
+                    <p class="text-xs text-github-text leading-relaxed">
+                        A <strong class="text-github-heading">Fork</strong> creates a server-side personal copy of someone else's repository under your account on GitHub. A <strong class="text-github-heading">Clone</strong> downloads a repository to your local computer.
+                    </p>
+                </div>
+
+                <div class="bg-github-card border border-github-border rounded-xl p-5 hover:border-github-blue/50 transition">
+                    <div class="w-10 h-10 rounded-lg bg-github-blue/10 text-github-blue flex items-center justify-center text-lg mb-4 border border-github-blue/30">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h4 class="font-bold text-github-heading text-base mb-2">GitHub Actions (CI/CD)</h4>
+                    <p class="text-xs text-github-text leading-relaxed">
+                        Automate software workflows using YAML files in <code class="text-github-blue">.github/workflows/</code>. Run tests, perform linting checks, or deploy code on every push or Pull Request automatically.
+                    </p>
+                </div>
+
+                <div class="bg-github-card border border-github-border rounded-xl p-5 hover:border-github-green/50 transition">
+                    <div class="w-10 h-10 rounded-lg bg-github-green/10 text-github-green flex items-center justify-center text-lg mb-4 border border-github-green/30">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h4 class="font-bold text-github-heading text-base mb-2">Branch Protection Rules</h4>
+                    <p class="text-xs text-github-text leading-relaxed">
+                        Enforce safeguards on primary branches (e.g., <code class="text-github-green">main</code>): require 1-2 approving reviews, mandate passing CI builds, and block force pushes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: Best Practices & Workflows -->
+    <section id="best-practices" class="py-16 border-b border-github-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-github-heading tracking-tight flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-md bg-github-green/20 text-github-green flex items-center justify-center text-base"><i class="fa-solid fa-lightbulb"></i></span>
+                    Workflows & Commit Best Practices
+                </h2>
+                <p class="mt-2 text-github-text">Industry standard branching strategies and conventional commit standards.</p>
+            </div>
+
+            <!-- Git Flow vs Trunk-Based Comparison -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Git Flow -->
+                <div class="bg-github-card border border-github-border rounded-xl p-6">
+                    <span class="text-xs font-mono px-2.5 py-1 rounded bg-github-purple/10 text-github-purple border border-github-purple/30 font-bold">Structured Enterprise Model</span>
+                    <h3 class="text-xl font-bold text-github-heading mt-3 mb-2">Git Flow Strategy</h3>
+                    <p class="text-xs text-github-text leading-relaxed mb-4">
+                        Uses long-lived branches (<code class="text-github-purple">main</code>, <code class="text-github-blue">develop</code>, <code class="text-github-orange font-bold">release</code>, <code class="text-github-red font-bold">hotfix</code>) along with short-lived feature branches. Best suited for scheduled software releases.
+                    </p>
+                    <ul class="space-y-2 text-xs text-github-text font-mono">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-github-purple"></i> Strong control over scheduled releases</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-github-purple"></i> Clear separation between production & active development</li>
+                    </ul>
+                </div>
+
+                <!-- Trunk-Based -->
+                <div class="bg-github-card border border-github-border rounded-xl p-6">
+                    <span class="text-xs font-mono px-2.5 py-1 rounded bg-github-green/10 text-github-green border border-github-green/30 font-bold">Modern Continuous Delivery</span>
+                    <h3 class="text-xl font-bold text-github-heading mt-3 mb-2">Trunk-Based Development</h3>
+                    <p class="text-xs text-github-text leading-relaxed mb-4">
+                        Developers merge small, frequent updates directly into a single central branch (<code class="text-github-green">main</code> or <code class="text-github-green">trunk</code>). Supported by feature flags and automated CI testing.
+                    </p>
+                    <ul class="space-y-2 text-xs text-github-text font-mono">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-github-green"></i> Minimizes long-lived merge conflicts</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-github-green"></i> Rapid deployments & continuous integration</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Conventional Commits Standards -->
+            <div class="bg-github-card border border-github-border rounded-xl p-6">
+                <h3 class="text-lg font-bold text-github-heading mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-github-blue"></i> Conventional Commit Standards
+                </h3>
+                <p class="text-xs text-github-text mb-4">Standardize your commit messages to generate automatic changelogs and maintain clean commit histories:</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
+                    <div class="p-3 bg-github-bg rounded border border-github-border">
+                        <span class="text-github-green font-bold block mb-1">feat: ...</span>
+                        <span class="text-github-text text-[11px]">Adds a new feature to the application</span>
+                    </div>
+                    <div class="p-3 bg-github-bg rounded border border-github-border">
+                        <span class="text-github-red font-bold block mb-1">fix: ...</span>
+                        <span class="text-github-text text-[11px]">Fixes a bug or error in codebase</span>
+                    </div>
+                    <div class="p-3 bg-github-bg rounded border border-github-border">
+                        <span class="text-github-blue font-bold block mb-1">docs: ...</span>
+                        <span class="text-github-text text-[11px]">Documentation edits or additions</span>
+                    </div>
+                    <div class="p-3 bg-github-bg rounded border border-github-border">
+                        <span class="text-github-purple font-bold block mb-1">refactor: ...</span>
+                        <span class="text-github-text text-[11px]">Code rewrite without changing behavior</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STICKY FLOATING COPYRIGHT WATERMARK BADGE FOR ABRAR ARHAM -->
+    <div id="authorWatermark" class="fixed bottom-4 left-4 z-40 bg-github-card/90 backdrop-blur border border-github-border hover:border-github-blue text-github-heading p-2.5 rounded-lg shadow-2xl transition flex items-center gap-2.5 text-xs font-mono">
+        <div class="w-8 h-8 rounded-full bg-git-orange flex items-center justify-center text-white font-bold text-xs shadow-md">
+            AA
+        </div>
+        <div class="flex flex-col">
+            <span class="font-bold text-github-blue flex items-center gap-1">
+                Abrar Arham <i class="fa-solid fa-circle-check text-[10px] text-github-blue"></i>
+            </span>
+            <span class="text-[10px] text-github-text/80">Daffodil International University</span>
+        </div>
+        <div class="border-l border-github-border pl-2 text-[10px] text-github-text/60 hidden sm:block">
+            &copy; 2026 Copyright
+        </div>
+    </div>
+
+    <!-- Footer with Comprehensive Copyright Notice -->
+    <footer class="bg-github-card border-t border-github-border py-8 text-center text-xs text-github-text">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2 font-mono">
+                <i class="fa-brands fa-git-alt text-git-orange text-lg"></i>
+                <span class="text-github-heading font-bold">Git & GitHub Mastery Guide</span>
+            </div>
+            
+            <!-- Mandatory Copyright Notice -->
+            <p class="text-center text-xs text-github-text leading-relaxed max-w-2xl">
+                &copy; 2026 <strong class="text-github-heading">Abrar Arham</strong>. Student of <strong class="text-github-heading">Daffodil International University</strong>. All rights reserved. Unauthorized duplication or redistribution is strictly prohibited.
+            </p>
+
+            <div class="flex items-center gap-4 text-xs font-mono">
+                <a href="#intro" class="hover:text-github-heading">Intro</a>
+                <a href="#simulator" class="hover:text-github-blue">Simulator</a>
+                <a href="#cheatsheet" class="hover:text-github-heading">Cheat Sheet</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Popup -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-github-header border border-github-blue text-github-heading px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 text-xs font-mono">
+        <i class="fa-solid fa-circle-check text-github-blue text-base"></i>
+        <span id="toastMsg">Command copied to clipboard!</span>
+    </div>
+
+    <script>
+        // CHEAT SHEET DATASET
+        const commandsData = [
+            {
+                category: 'setup',
+                command: 'git config --global user.name "Your Name"',
+                desc: 'Sets default commit author name across all repositories.',
+                syntax: 'git config --global user.name "<name>"',
+                example: 'git config --global user.name "Abrar Arham"'
+            },
+            {
+                category: 'setup',
+                command: 'git config --global user.email "email@diu.edu.bd"',
+                desc: 'Sets default email address linked to your commits.',
+                syntax: 'git config --global user.email "<email>"',
+                example: 'git config --global user.email "abrar@diu.edu.bd"'
+            },
+            {
+                category: 'basic',
+                command: 'git init',
+                desc: 'Initializes a new empty local Git repository in folder.',
+                syntax: 'git init [directory]',
+                example: 'git init my-project'
+            },
+            {
+                category: 'basic',
+                command: 'git status',
+                desc: 'Inspects status of Working Directory and Staging Index.',
+                syntax: 'git status',
+                example: 'git status'
+            },
+            {
+                category: 'basic',
+                command: 'git add .',
+                desc: 'Stages all new, modified, and untracked files for next commit.',
+                syntax: 'git add <file-pattern>',
+                example: 'git add index.html src/'
+            },
+            {
+                category: 'basic',
+                command: 'git commit -m "commit message"',
+                desc: 'Saves a staged snapshot permanently into local history.',
+                syntax: 'git commit -m "<message>"',
+                example: 'git commit -m "feat: setup project layout"'
+            },
+            {
+                category: 'basic',
+                command: 'git log --oneline',
+                desc: 'Prints a simplified single-line history log of commits.',
+                syntax: 'git log [--oneline] [--graph]',
+                example: 'git log --oneline --graph'
+            },
+            {
+                category: 'branching',
+                command: 'git branch',
+                desc: 'Lists all local branches. Asterisk * marks active branch.',
+                syntax: 'git branch [<branch-name>]',
+                example: 'git branch feature/login'
+            },
+            {
+                category: 'branching',
+                command: 'git checkout -b feature-name',
+                desc: 'Creates a new branch and switches workspace to it.',
+                syntax: 'git checkout -b <branch>  OR  git switch -c <branch>',
+                example: 'git checkout -b feat/dashboard'
+            },
+            {
+                category: 'branching',
+                command: 'git merge branch-name',
+                desc: 'Merges commit history of target branch into active branch.',
+                syntax: 'git merge <branch-to-merge>',
+                example: 'git merge feature/login'
+            },
+            {
+                category: 'undoing',
+                command: 'git restore <file>',
+                desc: 'Discards uncommitted changes in your working directory.',
+                syntax: 'git restore <path>',
+                example: 'git restore app.js'
+            },
+            {
+                category: 'undoing',
+                command: 'git reset HEAD~1',
+                desc: 'Undoes last commit while preserving file modifications.',
+                syntax: 'git reset [--soft | --hard] <commit>',
+                example: 'git reset --soft HEAD~1'
+            },
+            {
+                category: 'stashing',
+                command: 'git stash',
+                desc: 'Temporarily stashes uncommitted changes into stack.',
+                syntax: 'git stash [save "msg"]',
+                example: 'git stash'
+            },
+            {
+                category: 'stashing',
+                command: 'git stash pop',
+                desc: 'Re-applies most recently stashed changes and removes from stash stack.',
+                syntax: 'git stash pop',
+                example: 'git stash pop'
+            },
+            {
+                category: 'remote',
+                command: 'git remote add origin <url>',
+                desc: 'Links local repository to cloud remote server on GitHub.',
+                syntax: 'git remote add <name> <url>',
+                example: 'git remote add origin https://github.com/user/repo.git'
+            },
+            {
+                category: 'remote',
+                command: 'git push -u origin main',
+                desc: 'Pushes local commits to remote repository on GitHub.',
+                syntax: 'git push [-u] <remote> <branch>',
+                example: 'git push -u origin main'
+            },
+            {
+                category: 'remote',
+                command: 'git pull origin main',
+                desc: 'Fetches and merges remote updates into local branch.',
+                syntax: 'git pull <remote> <branch>',
+                example: 'git pull origin main'
+            }
+        ];
+
+        // COPY TO CLIPBOARD HELPER
+        function copyText(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+            showToast(`Copied: "${text.substring(0, 25)}${text.length > 25 ? '...' : ''}"`);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // ARCHITECTURE INTERACTIVE STAGE DETAILS DATA
+        const archStagesInfo = {
+            1: {
+                title: '1. Working Directory (Local Files)',
+                color: 'text-github-red',
+                badgeBg: 'bg-github-red/10 text-github-red border-github-red/30',
+                desc: 'This stage represents your computer’s hard drive filesystem. It holds files you create or edit directly inside your code editor (VS Code). Files here are either Untracked (brand new) or Modified (edited existing files).',
+                transitions: [
+                    { cmd: 'git add <file>', target: 'Stages changes into Staging Area' },
+                    { cmd: 'git restore <file>', target: 'Discards local edits' },
+                    { cmd: 'git stash', target: 'Saves edits temporarily into Stash' }
+                ]
+            },
+            2: {
+                title: '2. Staging Area (Index)',
+                color: 'text-github-orange',
+                badgeBg: 'bg-github-orange/10 text-github-orange border-github-orange/30',
+                desc: 'The Staging Area acts as a drafting index buffer. It lets you curate and inspect exactly which changes will be bundled together in your upcoming commit snapshot.',
+                transitions: [
+                    { cmd: 'git commit -m "msg"', target: 'Permanently records snapshot in Local Repo' },
+                    { cmd: 'git restore --staged <file>', target: 'Unstages changes back to Working Dir' }
+                ]
+            },
+            3: {
+                title: '3. Local Repository (.git database)',
+                color: 'text-github-green',
+                badgeBg: 'bg-github-green/10 text-github-green border-github-green/30',
+                desc: 'Your Local Repository stores the complete, immutable commit history inside the hidden `.git/` folder. Working here requires zero internet connection.',
+                transitions: [
+                    { cmd: 'git push origin <branch>', target: 'Uploads commits to GitHub Remote' },
+                    { cmd: 'git checkout -b <name>', target: 'Creates new branch locally' },
+                    { cmd: 'git reset HEAD~1', target: 'Undoes most recent local commit' }
+                ]
+            },
+            4: {
+                title: '4. Remote Repository (GitHub Cloud)',
+                color: 'text-github-purple',
+                badgeBg: 'bg-github-purple/10 text-github-purple border-github-purple/30',
+                desc: 'Hosted in the cloud on GitHub, the Remote Repository serves as the central source of truth for engineering teams to share code and conduct code reviews via Pull Requests.',
+                transitions: [
+                    { cmd: 'git fetch / git pull', target: 'Downloads remote changes to local machine' },
+                    { cmd: 'git clone <url>', target: 'Downloads complete repository locally' }
+                ]
+            }
+        };
+
+        function selectArchStage(stageNum) {
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById(`arch-stage-${i}`);
+                if (i === stageNum) {
+                    el.classList.add('stage-active');
+                } else {
+                    el.classList.remove('stage-active');
+                }
+            }
+
+            const info = archStagesInfo[stageNum];
+            const detailPanel = document.getElementById('archDetailPanel');
+
+            detailPanel.innerHTML = `
+                <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-github-border pb-3 mb-4 gap-2">
+                    <h4 class="font-bold text-lg text-github-heading flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded text-xs font-mono border ${info.badgeBg}">Stage ${stageNum}</span>
+                        ${info.title}
+                    </h4>
+                    <span class="text-xs font-mono text-github-blue">Selected View</span>
+                </div>
+                <p class="text-sm text-github-text leading-relaxed mb-6">${info.desc}</p>
+                <div class="border-t border-github-border pt-4">
+                    <span class="text-xs font-mono text-github-heading font-bold block mb-3">Key Transition Commands:</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        ${info.transitions.map(t => `
+                            <div class="p-3 bg-github-bg rounded-lg border border-github-border flex flex-col justify-between">
+                                <code class="text-xs text-git-orange font-bold font-mono block mb-1">${t.cmd}</code>
+                                <span class="text-[11px] text-github-text">${t.target}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // RENDER CHEAT SHEET
+        function renderCheatSheet(filterCat = 'all', searchQuery = '') {
+            const grid = document.getElementById('cheatGrid');
+            grid.innerHTML = '';
+
+            const filtered = commandsData.filter(item => {
+                const matchesCat = (filterCat === 'all' || item.category === filterCat);
+                const query = searchQuery.toLowerCase();
+                const matchesSearch = item.command.toLowerCase().includes(query) ||
+                                      item.desc.toLowerCase().includes(query) ||
+                                      item.example.toLowerCase().includes(query);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-github-text">
+                        <i class="fa-solid fa-ghost text-3xl mb-2 block"></i>
+                        No matching commands found.
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'bg-github-card border border-github-border rounded-xl p-5 hover:border-github-blue/50 transition flex flex-col justify-between group';
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-github-header border border-github-border text-github-blue font-semibold">
+                                ${item.category}
+                            </span>
+                            <button onclick="copyText('${item.command.replace(/'/g, "\\'")}')" class="text-xs text-github-text hover:text-github-heading px-2.5 py-1 rounded bg-github-bg hover:bg-github-header border border-github-border transition flex items-center gap-1.5">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <h4 class="font-mono text-sm font-bold text-github-heading mb-2 code-font group-hover:text-github-blue transition">
+                            ${item.command}
+                        </h4>
+                        <p class="text-xs text-github-text mb-4 leading-relaxed">${item.desc}</p>
+                    </div>
+
+                    <div class="border-t border-github-border/60 pt-3 mt-2 space-y-1.5 font-mono text-[11px]">
+                        <div class="text-github-text/70">
+                            <span class="text-github-blue">Syntax:</span> <code>${item.syntax}</code>
+                        </div>
+                        <div class="text-github-text/70">
+                            <span class="text-github-green">Example:</span> <code class="text-github-heading">${item.example}</code>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Cheat sheet Category Tab Click
+        document.getElementById('categoryTabs').addEventListener('click', (e) => {
+            if (e.target.classList.contains('cat-btn')) {
+                document.querySelectorAll('.cat-btn').forEach(btn => {
+                    btn.className = 'cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono bg-github-card text-github-text hover:bg-github-header border border-github-border';
+                });
+                e.target.className = 'cat-btn active px-3.5 py-1.5 rounded-lg text-xs font-medium font-mono bg-git-orange text-white';
+                const cat = e.target.getAttribute('data-cat');
+                const searchVal = document.getElementById('cheatSearch').value;
+                renderCheatSheet(cat, searchVal);
+            }
+        });
+
+        // Search Input Event
+        document.getElementById('cheatSearch').addEventListener('input', (e) => {
+            const activeBtn = document.querySelector('.cat-btn.active');
+            const cat = activeBtn ? activeBtn.getAttribute('data-cat') : 'all';
+            renderCheatSheet(cat, e.target.value);
+        });
+
+        // GIT TERMINAL SIMULATOR STATE ENGINE
+        const repoState = {
+            isInit: false,
+            currentBranch: 'main',
+            branches: ['main'],
+            untracked: [],
+            staged: [],
+            stashes: [],
+            commits: [], // [{hash, msg, branch}]
+            pushedCommitsCount: 0
+        };
+
+        const terminalOutput = document.getElementById('terminalOutput');
+        const terminalInput = document.getElementById('terminalInput');
+        const terminalForm = document.getElementById('terminalForm');
+        const terminalPrompt = document.getElementById('terminalPrompt');
+
+        function printLine(text, colorClass = 'text-github-text') {
+            const div = document.createElement('div');
+            div.className = `code-font text-xs sm:text-sm ${colorClass}`;
+            div.innerHTML = text;
+            terminalOutput.appendChild(div);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        function updatePrompt() {
+            if (repoState.isInit) {
+                terminalPrompt.innerHTML = `user@dev:~/my-project <span class="text-github-purple">(${repoState.currentBranch})</span>$`;
+            } else {
+                terminalPrompt.innerHTML = `user@dev:~/my-project$`;
+            }
+        }
+
+        function renderVisualState() {
+            const activeBranchBadge = document.getElementById('activeBranchBadge');
+            const untrackedBox = document.getElementById('untrackedBox');
+            const stagedBox = document.getElementById('stagedBox');
+            const stashBox = document.getElementById('stashBox');
+            const commitsBox = document.getElementById('commitsBox');
+            const remoteBox = document.getElementById('remoteBox');
+
+            if (!repoState.isInit) {
+                activeBranchBadge.innerText = "Repo Not Initialized";
+                activeBranchBadge.className = "text-xs font-mono bg-github-red/10 text-github-red border border-github-red/30 px-2 py-0.5 rounded";
+            } else {
+                activeBranchBadge.innerText = `Branch: ${repoState.currentBranch}`;
+                activeBranchBadge.className = "text-xs font-mono bg-github-purple/10 text-github-purple border border-github-purple/30 px-2 py-0.5 rounded font-bold";
+            }
+
+            // Render Untracked
+            document.getElementById('untrackedCount').innerText = `${repoState.untracked.length} files`;
+            if (repoState.untracked.length === 0) {
+                untrackedBox.innerHTML = '<span class="text-github-text/40 italic">Clean</span>';
+            } else {
+                untrackedBox.innerHTML = repoState.untracked.map(f => `
+                    <span class="bg-github-red/10 text-github-red px-2 py-0.5 rounded border border-github-red/30">${f}</span>
+                `).join('');
+            }
+
+            // Render Staged
+            document.getElementById('stagedCount').innerText = `${repoState.staged.length} files`;
+            if (repoState.staged.length === 0) {
+                stagedBox.innerHTML = '<span class="text-github-text/40 italic">Empty</span>';
+            } else {
+                stagedBox.innerHTML = repoState.staged.map(f => `
+                    <span class="bg-github-orange/10 text-github-orange px-2 py-0.5 rounded border border-github-orange/30">${f}</span>
+                `).join('');
+            }
+
+            // Render Stash
+            document.getElementById('stashCount').innerText = `${repoState.stashes.length} stashes`;
+            if (repoState.stashes.length === 0) {
+                stashBox.innerHTML = '<span class="text-github-text/40 italic">No stashed changes</span>';
+            } else {
+                stashBox.innerHTML = repoState.stashes.map((s, idx) => `
+                    <span class="bg-github-blue/10 text-github-blue px-2 py-0.5 rounded border border-github-blue/30 text-[11px]">stash@{${idx}}: ${s.length} files</span>
+                `).join('');
+            }
+
+            // Render Commits
+            document.getElementById('commitsCount').innerText = `${repoState.commits.length} commits`;
+            if (repoState.commits.length === 0) {
+                commitsBox.innerHTML = '<span class="text-github-text/40 italic">No commits yet</span>';
+            } else {
+                commitsBox.innerHTML = repoState.commits.map(c => `
+                    <div class="flex items-center justify-between bg-github-header px-2 py-1 rounded border border-github-border">
+                        <span class="text-github-green font-bold">${c.hash}</span>
+                        <span class="text-github-heading truncate max-w-[130px]">${c.msg}</span>
+                        <span class="text-[10px] text-github-purple">(${c.branch})</span>
+                    </div>
+                `).join('');
+            }
+
+            // Render Remote GitHub State
+            const unpushedCount = repoState.commits.length - repoState.pushedCommitsCount;
+            document.getElementById('remoteCount').innerText = (unpushedCount === 0 && repoState.commits.length > 0) ? "Synced" : `${unpushedCount} unpushed`;
+            if (repoState.pushedCommitsCount === 0) {
+                remoteBox.innerHTML = '<span class="text-github-text/40 italic">Remote clean / Not pushed</span>';
+            } else {
+                remoteBox.innerHTML = `
+                    <div class="bg-github-purple/10 text-github-purple px-2 py-1 rounded border border-github-purple/30 flex items-center justify-between text-xs">
+                        <span><i class="fa-brands fa-github mr-1"></i> origin/${repoState.currentBranch}</span>
+                        <span>${repoState.pushedCommitsCount} commits synced</span>
+                    </div>
+                `;
+            }
+        }
+
+        function fillCmd(cmdText) {
+            terminalInput.value = cmdText;
+            terminalInput.focus();
+        }
+
+        // CLI COMMAND PARSER
+        terminalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const cmd = terminalInput.value.trim();
+            if (!cmd) return;
+
+            // Echo input
+            printLine(`${terminalPrompt.innerHTML} ${cmd}`, 'text-github-heading');
+            terminalInput.value = '';
+
+            const parts = cmd.split(' ');
+            const mainCmd = parts[0].toLowerCase();
+
+            if (mainCmd === 'clear') {
+                terminalOutput.innerHTML = '';
+                return;
+            }
+
+            if (mainCmd === 'help') {
+                printLine(`Available Commands in Simulator (Author: Abrar Arham - DIU):`, 'text-github-blue font-bold');
+                printLine(`  <span class="text-git-orange">git init</span> - Initialize repo`);
+                printLine(`  <span class="text-git-orange">touch &lt;file&gt;</span> - Create untracked file (e.g. touch app.js)`);
+                printLine(`  <span class="text-git-orange">git status</span> - View working directory status`);
+                printLine(`  <span class="text-git-orange">git add &lt;file&gt;</span> or <span class="text-git-orange">git add .</span> - Stage files`);
+                printLine(`  <span class="text-git-orange">git commit -m "&lt;msg&gt;"</span> - Commit staged files`);
+                printLine(`  <span class="text-git-orange">git stash</span> - Temporarily stash edits`);
+                printLine(`  <span class="text-git-orange">git stash pop</span> - Restore stashed edits`);
+                printLine(`  <span class="text-git-orange">git branch &lt;name&gt;</span> - List or create branches`);
+                printLine(`  <span class="text-git-orange">git checkout &lt;branch&gt;</span> or <span class="text-git-orange">git checkout -b &lt;name&gt;</span> - Switch/create branch`);
+                printLine(`  <span class="text-git-orange">git push</span> - Upload commits to remote GitHub`);
+                printLine(`  <span class="text-git-orange">clear</span> - Clear output`);
+                return;
+            }
+
+            if (mainCmd === 'touch') {
+                const fileName = parts[1] || 'file.txt';
+                if (!repoState.untracked.includes(fileName) && !repoState.staged.includes(fileName)) {
+                    repoState.untracked.push(fileName);
+                    printLine(`Created untracked file <span class="text-github-heading font-bold">${fileName}</span>`);
+                } else {
+                    printLine(`File '${fileName}' already exists in working tree.`, 'text-github-orange');
+                }
+                renderVisualState();
+                return;
+            }
+
+            if (mainCmd === 'git') {
+                const subCmd = parts[1] ? parts[1].toLowerCase() : '';
+
+                if (subCmd === 'init') {
+                    if (repoState.isInit) {
+                        printLine(`Reinitialized existing Git repository in /my-project/.git/`, 'text-github-orange');
+                    } else {
+                        repoState.isInit = true;
+                        printLine(`Initialized empty Git repository in /my-project/.git/`, 'text-github-green font-bold');
+                    }
+                    updatePrompt();
+                    renderVisualState();
+                    return;
+                }
+
+                if (!repoState.isInit) {
+                    printLine(`fatal: not a git repository (or any of the parent directories): .git`, 'text-github-red');
+                    return;
+                }
+
+                if (subCmd === 'status') {
+                    printLine(`On branch <span class="text-github-purple font-bold">${repoState.currentBranch}</span>`);
+                    if (repoState.staged.length === 0 && repoState.untracked.length === 0) {
+                        printLine(`nothing to commit, working tree clean`, 'text-github-green');
+                    } else {
+                        if (repoState.staged.length > 0) {
+                            printLine(`Changes to be committed:`, 'text-github-orange');
+                            repoState.staged.forEach(f => printLine(`  staged:   ${f}`, 'text-github-orange'));
+                        }
+                        if (repoState.untracked.length > 0) {
+                            printLine(`Untracked files:`, 'text-github-red');
+                            repoState.untracked.forEach(f => printLine(`  untracked: ${f}`, 'text-github-red'));
+                        }
+                    }
+                    return;
+                }
+
+                if (subCmd === 'add') {
+                    const arg = parts[2];
+                    if (!arg) {
+                        printLine(`Nothing specified, nothing added.`, 'text-github-orange');
+                        return;
+                    }
+                    if (arg === '.' || arg === '-A') {
+                        repoState.staged.push(...repoState.untracked);
+                        repoState.untracked = [];
+                        printLine(`Staged all files for commit.`, 'text-github-green');
+                    } else if (repoState.untracked.includes(arg)) {
+                        repoState.untracked = repoState.untracked.filter(f => f !== arg);
+                        repoState.staged.push(arg);
+                        printLine(`Staged file '${arg}'`, 'text-github-green');
+                    } else {
+                        printLine(`pathspec '${arg}' did not match any files`, 'text-github-red');
+                    }
+                    renderVisualState();
+                    return;
+                }
+
+                if (subCmd === 'commit') {
+                    if (repoState.staged.length === 0) {
+                        printLine(`no changes added to commit (use "git add")`, 'text-github-orange');
+                        return;
+                    }
+                    const rawMsg = cmd.substring(cmd.indexOf('commit') + 6).replace(/-m/g, '').trim();
+                    const msg = rawMsg.replace(/["']/g, '') || "Update files";
+                    const randomHash = Math.random().toString(36).substring(2, 8);
+
+                    repoState.commits.unshift({
+                        hash: randomHash,
+                        msg: msg,
+                        branch: repoState.currentBranch
+                    });
+                    repoState.staged = [];
+                    printLine(`[${repoState.currentBranch} ${randomHash}] ${msg}`, 'text-github-green font-bold');
+                    renderVisualState();
+                    return;
+                }
+
+                if (subCmd === 'stash') {
+                    const action = parts[2] ? parts[2].toLowerCase() : '';
+                    if (action === 'pop') {
+                        if (repoState.stashes.length === 0) {
+                            printLine(`No stash entries found.`, 'text-github-orange');
+                        } else {
+                            const popped = repoState.stashes.shift();
+                            repoState.untracked.push(...popped);
+                            printLine(`Dropped stash@{0} and restored ${popped.length} file(s) to Working Directory.`, 'text-github-blue font-bold');
+                        }
+                    } else {
+                        if (repoState.untracked.length === 0 && repoState.staged.length === 0) {
+                            printLine(`No local changes to save`, 'text-github-orange');
+                        } else {
+                            const stashItems = [...repoState.untracked, ...repoState.staged];
+                            repoState.stashes.unshift(stashItems);
+                            repoState.untracked = [];
+                            repoState.staged = [];
+                            printLine(`Saved working directory and index state WIP on ${repoState.currentBranch}`, 'text-github-blue font-bold');
+                        }
+                    }
+                    renderVisualState();
+                    return;
+                }
+
+                if (subCmd === 'branch') {
+                    const newBranch = parts[2];
+                    if (!newBranch) {
+                        printLine(`Local branches:`);
+                        repoState.branches.forEach(b => {
+                            if (b === repoState.currentBranch) {
+                                printLine(`* <span class="text-github-green font-bold">${b}</span>`);
+                            } else {
+                                printLine(`  ${b}`);
+                            }
+                        });
+                    } else {
+                        if (!repoState.branches.includes(newBranch)) {
+                            repoState.branches.push(newBranch);
+                            printLine(`Created branch '${newBranch}'`, 'text-github-green');
+                        } else {
+                            printLine(`fatal: a branch named '${newBranch}' already exists.`, 'text-github-red');
+                        }
+                    }
+                    renderVisualState();
+                    return;
+                }
+
+                if (subCmd === 'checkout' || subCmd === 'switch') {
+                    let targetBranch = parts[2];
+                    if (targetBranch === '-b' && parts[3]) {
+                        targetBranch = parts[3];
+                        if (!repoState.branches.includes(targetBranch)) {
+                            repoState.branches.push(targetBranch);
+                        }
+                    }
+                    if (!targetBranch) {
+                        printLine(`Please specify branch name.`, 'text-github-orange');
+                        return;
+                    }
+                    if (repoState.branches.includes(targetBranch)) {
+                        repoState.currentBranch = targetBranch;
+                        printLine(`Switched to branch '${targetBranch}'`, 'text-github-purple font-bold');
+                        updatePrompt();
+                    } else {
+                        printLine(`error: pathspec '${targetBranch}' did not match any branch`, 'text-github-red');
+                    }
+                    renderVisualState();
+                    return;
+                }
+
+                if (subCmd === 'push') {
+                    if (repoState.commits.length === 0) {
+                        printLine(`Everything up-to-date (no commits to push)`, 'text-github-orange');
+                        return;
+                    }
+                    repoState.pushedCommitsCount = repoState.commits.length;
+                    printLine(`To https://github.com/abrar-arham/my-project.git`, 'text-github-purple');
+                    printLine(` * [new branch]      ${repoState.currentBranch} -> ${repoState.currentBranch}`, 'text-github-green');
+                    printLine(`Successfully pushed ${repoState.pushedCommitsCount} commit(s) to GitHub!`, 'text-github-green font-bold');
+                    renderVisualState();
+                    return;
+                }
+
+                printLine(`git: '${subCmd}' is not recognized in simulator. Type <span class="text-github-blue">help</span>.`, 'text-github-red');
+                return;
+            }
+
+            printLine(`bash: command not found: ${mainCmd}. Type <span class="text-github-blue">help</span>.`, 'text-github-red');
+        });
+
+        // Clear terminal button
+        document.getElementById('clearTerminalBtn').addEventListener('click', () => {
+            terminalOutput.innerHTML = '';
+        });
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // INITIALIZATION ON LOAD
+        window.onload = function() {
+            selectArchStage(1);
+            renderCheatSheet();
+            renderVisualState();
+            updatePrompt();
+        };
+    </script>
+</body>
+</html>
